@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Infinite Carousel</title>
+    <script type="text/javascript" src="./bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="./bower_components/underscore/underscore.js"></script>
+    <script type="text/javascript" src="./bower_components/backbone/backbone.js"></script>
+    <script type="text/javascript" src="./bower_components/jquery.promises/image.js"></script>
+    <script type="text/javascript" src="./bower_components/backbone.infinite-collection/Backbone.InfiniteCollection.js"></script>
+    <script type="text/javascript" src="./Backbone.InfiniteCarousel.js"></script>
+    <style type="text/css">
+
+#carousel {
+  width: 25%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+#carousel > div > div {
+  display: inline-block;
+  width: 25%;
+}
+
+#carousel figure {
+  margin: 0;
+}
+
+#carousel figure img {
+  max-width: 100%;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="carousel"></div>
+  </body>
+    <script type="text/javascript">
+    
+var rappers = [
+  {
+    "image": "./images/100.png",
+    "title": "Continue"
+  },
+  {
+    "image": "./images/101.png",
+    "title": "Switching Protocols"
+  },
+  {
+    "image": "./images/200.png",
+    "title": "OK"
+  },
+  {
+    "image": "./images/201.png",
+    "title": "Created"
+  },
+  {
+    "image": "./images/202.png",
+    "title": "Accepted"
+  },
+  {
+    "image": "./images/203.png",
+    "title": "Non-Authoritative Information"
+  },
+  {
+    "image": "./images/204.png",
+    "title": "No Content"
+  },
+  {
+    "image": "./images/206.png",
+    "title": "Partial Content"
+  },
+  {
+    "image": "./images/300.png",
+    "title": "Multiple Choices"
+  },
+  {
+    "image": "./images/301.png",
+    "title": "Moved Permanently"
+  },
+  {
+    "image": "./images/302.png",
+    "title": "Found"
+  },
+  {
+    "image": "./images/303.png",
+    "title": "See Other"
+  },
+  {
+    "image": "./images/304.png",
+    "title": "Not Modified"
+  },
+  {
+    "image": "./images/400.png",
+    "title": "Bad Request"
+  },
+  {
+    "image": "./images/401.png",
+    "title": "Unauthorized"
+  },
+  {
+    "image": "./images/402.png",
+    "title": "Payment Required"
+  },
+  {
+    "image": "./images/404.png",
+    "title": "Not Found"
+  },
+  {
+    "image": "./images/406.png",
+    "title": "Not Acceptable"
+  },
+  {
+    "image": "./images/410.png",
+    "title": "Gone"
+  },
+  {
+    "image": "./images/413.png",
+    "title": "Request Entity Too Large"
+  },
+  {
+    "image": "./images/420.png",
+    "title": "Enhance Your Calm"
+  },
+  {
+    "image": "./images/500.png",
+    "title": "Internal Server Error"
+  },
+  {
+    "image": "./images/502.png",
+    "title": "Bad Gateway"
+  },
+  {
+    "image": "./images/504.png",
+    "title": "Gateway Timeout"
+  }
+];
+
+var carousel = new Backbone.InfiniteCarousel({
+  collection:
+    new Backbone.InfiniteCollection(rappers),
+  el:
+    '#carousel'
+});
+
+    </script>
+</html>
