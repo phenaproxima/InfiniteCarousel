@@ -1,0 +1,29 @@
+{
+  "name": "InfiniteCarousel",
+  "version": "0.0.0",
+  "homepage": "https://github.com/phenaproxima/InfiniteCarousel",
+  "authors": [
+    "Phéna Proxima <djphenaproxima@gmail.com>"
+  ],
+  "description": "A simple, responsive, infinite carousel for Backbone.",
+  "main": "Backbone.InfiniteCarousel.js",
+  "keywords": [
+    "carousel",
+    "slideshow",
+    "responsive",
+    "Backbone"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "jquery": "~2.1.1",
+    "backbone.infinite-collection": "~0.1.0"
+  }
+}
