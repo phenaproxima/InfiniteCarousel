@@ -2,7 +2,7 @@
 
 Backbone.InfiniteCarousel = Backbone.View.extend({
 
-  imageView: Backbone.View.extend({
+  imageRenderer: Backbone.View.extend({
 
     tagName: 'figure',
 
@@ -14,23 +14,28 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
 
   animation: {},
 
+  events: {
+    'click button[rel = "prev"]': '_onPrevClick',
+    'click button[rel = "next"]': '_onNextClick'
+  },
+
   initialize: function(options) {
     _.extend(this, _.pick(options, 'imageView', 'animation'));
 
-    this._prevButton = $('<button></button>').html('&laquo;').attr({ rel: 'prev', disabled: true }).on('click', { controller: this }, this._onPrevClick);
-    this._nextButton = $('<button></button>').html('&raquo;').attr({ rel: 'next', disabled: true }).on('click', { controller: this }, this._onNextClick);
-    this._track = $('<div></div>').width('400%');
+    this._prevButton = $('<button rel="prev" disabled="true">&laquo;</button>');
+    this._nextButton = $('<button rel="next" disabled="true">&raquo;</button>');
+    this._track = $('<div style="width: 400%;"></div>');
 
-    $('<div></div>').width('25%').append(this.collection.getPage().map(this._renderImage, this)).appendTo(this._track);
+    $('<div style="width: 25%;"></div>').append(this.collection.getPage().map(this._renderImage, this)).appendTo(this._track);
 
     var controller = this;
 
-    $('<div></div>').width('25%').append(this.collection.behind().map(this._renderImage, this)).prependTo(this._track).imagesLoaded(function() {
+    $('<div style="width: 25%;"></div>').append(this.collection.behind().map(this._renderImage, this)).prependTo(this._track).imagesLoaded(function() {
       controller._prevButton.removeAttr('disabled');
       controller._track.css('margin-left', '-100%');
     });
     
-    $('<div></div>').width('25%').append(this.collection.ahead().map(this._renderImage, this)).appendTo(this._track).imagesLoaded(function() {
+    $('<div style="width: 25%;"></div>').append(this.collection.ahead().map(this._renderImage, this)).appendTo(this._track).imagesLoaded(function() {
       controller._nextButton.removeAttr('disabled');
     });
 
@@ -38,39 +43,35 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
   },
 
   _renderImage: function(i) {
-    var v = new this.imageView({ model: i });
+    var v = new this.imageRenderer({ model: i });
     v.render();
     return v.el;
   },
 
-  _onPrevClick: function(event) {
-    var controller = event.data.controller;
-
-    function after() {
-      $('<div></div>').width('25%').append(controller.collection.behind().map(controller._renderImage, controller)).imagesLoaded(function() {
-        $(this.elements[0]).prependTo(controller._track).parent().css('margin-left', '-100%').children().last().remove();
-        controller._prevButton.removeAttr('disabled');
-      });
-    }
-
-    controller.collection.retreat();
-    controller._prevButton.attr('disabled', true);
-    controller._track.animate({ marginLeft: '+=100%' }, _.extend({}, controller.animation, { complete: after }));
+  _onAnimationDone: function(collectionMethod, loadHandler) {
+    $('<div style="width: 25%;"></div>').append(this.collection[collectionMethod]().map(this._renderImage, this)).imagesLoaded($.proxy(loadHandler, this));
   },
 
-  _onNextClick: function(event) {
-    var controller = event.data.controller;
+  _onPrevLoaded: function(instance) {
+    $(instance.elements[0]).prependTo(this._track).parent().css('margin-left', '-100%').children().last().remove();
+    this._prevButton.removeAttr('disabled');
+  },
 
-    function after() {
-      $('<div></div>').width('25%').append(controller.collection.ahead().map(controller._renderImage, controller)).imagesLoaded(function() {
-        $(this.elements[0]).appendTo(controller._track).parent().css('margin-left', '-100%').children().first().remove();
-        controller._nextButton.removeAttr('disabled');
-      });
-    }
+  _onPrevClick: function() {
+    this.collection.retreat();
+    this._prevButton.attr('disabled', true);
+    this._track.animate({ marginLeft: '+=100%' }, _.extend({}, this.animation, { complete: $.proxy(this._onAnimationDone, this, 'behind', this._onPrevLoaded) }));
+  },
 
-    controller.collection.advance();
-    controller._nextButton.attr('disabled', true);
-    controller._track.animate({ marginLeft: '-=100%' }, _.extend({}, controller.animation, { complete: after }));
+  _onNextLoaded: function(instance) {
+    $(instance.elements[0]).appendTo(this._track).parent().css('margin-left', '-100%').children().first().remove();
+    this._nextButton.removeAttr('disabled');
+  },
+
+  _onNextClick: function() {
+    this.collection.advance();
+    this._nextButton.attr('disabled', true);
+    this._track.animate({ marginLeft: '-=100%' }, _.extend({}, this.animation, { complete: $.proxy(this._onAnimationDone, this, 'ahead', this._onNextLoaded) }));
   },
 
   render: function() {
