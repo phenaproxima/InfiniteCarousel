@@ -45,10 +45,8 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
     controller.collection.retreat();
     controller._prevButton.attr('disabled', true);
     controller._track.animate({ marginLeft: '+=100%' }, function() {
-      $(this).children().last().remove();
       $('<div></div>').width('25%').append(controller.collection.behind().map(controller._renderImage)).imagesLoaded(function() {
-        $(this.elements[0]).prependTo(controller._track);
-        controller._track.css('margin-left', '-100%');
+        $(this.elements[0]).prependTo(controller._track).parent().css('margin-left', '-100%').children().last().remove();
         controller._prevButton.removeAttr('disabled');
       });
     });
@@ -60,10 +58,8 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
     controller.collection.advance();
     controller._nextButton.attr('disabled', true);
     controller._track.animate({ marginLeft: '-=100%' }, function() {
-      $(this).children().first().remove();
       $('<div></div>').width('25%').append(controller.collection.ahead().map(controller._renderImage)).imagesLoaded(function() {
-        $(this.elements[0]).appendTo(controller._track);
-        controller._track.css('margin-left', '-100%');
+        $(this.elements[0]).appendTo(controller._track).parent().css('margin-left', '-100%').children().first().remove();
         controller._nextButton.removeAttr('disabled');
       });
     });
