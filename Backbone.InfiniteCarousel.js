@@ -7,6 +7,8 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
     tagName: 'figure',
 
     render: function() {
+      this.el.style.display = 'inline-block';
+      this.el.style.width = (100 / this.collection.pageSize).toFixed(2) + '%';
       $('<img />').attr('src', this.model.get('image')).appendTo(this.el);
     }
 
@@ -43,7 +45,7 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
   },
 
   _renderImage: function(i) {
-    var v = new this.imageRenderer({ model: i });
+    var v = new this.imageRenderer({ model: i, collection: this.collection });
     v.render();
     return v.el;
   },
