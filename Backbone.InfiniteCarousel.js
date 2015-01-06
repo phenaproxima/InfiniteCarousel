@@ -56,23 +56,23 @@ Backbone.InfiniteCarousel = Backbone.View.extend({
 
   _onPrevLoaded: function(instance) {
     $(instance.elements[0]).prependTo(this._track).parent().css('margin-left', '-100%').children().last().remove();
-    this._prevButton.removeAttr('disabled');
+    this._prevButton.removeAttr('disabled').parent().removeClass('loading');
   },
 
   _onPrevClick: function() {
     this.collection.retreat();
-    this._prevButton.attr('disabled', true);
+    this._prevButton.attr('disabled', true).parent().addClass('loading');
     this._track.animate({ marginLeft: '+=100%' }, _.extend({}, this.animation, { complete: $.proxy(this._onAnimationDone, this, 'behind', this._onPrevLoaded) }));
   },
 
   _onNextLoaded: function(instance) {
     $(instance.elements[0]).appendTo(this._track).parent().css('margin-left', '-100%').children().first().remove();
-    this._nextButton.removeAttr('disabled');
+    this._nextButton.removeAttr('disabled').parent().removeClass('loading');
   },
 
   _onNextClick: function() {
     this.collection.advance();
-    this._nextButton.attr('disabled', true);
+    this._nextButton.attr('disabled', true).parent().addClass('loading');
     this._track.animate({ marginLeft: '-=100%' }, _.extend({}, this.animation, { complete: $.proxy(this._onAnimationDone, this, 'ahead', this._onNextLoaded) }));
   },
 
